@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Viaje - Log In or Sign Up</title>
-		<link rel="stylesheet" href="styles/style.css">
+		<title>Viaje - I've been there</title>
+		<link rel="stylesheet" href="styles/indexStyle.css">
+		<link href="https://fonts.googleapis.com/css?family=Lobster|Roboto" rel="stylesheet">
+		<script src="js/indexFunctionality.js"></script>
 	</head>
 	<body>
+		<div id="message">
+			<p>Share and explore everyone's journey</p>
+		</div>
 		<div class="cont">
 			<h1 id="title">Viaje</h1>
-			<h2 id="title2">Sign in or sign up to see your friends journey.</h2>
-			<div id="form">
-				<p><input type="text" class="inp login" id="username" placeholder="Username"></p>
-				<p><input type="password" class="inp login" id="password" placeholder="Password"></p>
-				<p><input type="submit" id="submit" value="Sign In"></p>
+			<div id="form1">
+				<p class="title2">Sign up and share your journey now.</p>
+				<p><input type="text" class="inp" id="firstname" placeholder="Firstname"></p>
+				<p><input type="text" class="inp" id="lastname" placeholder="Lastname"></p>
+				<p><input type="text" class="inp" id="email" placeholder="Email"></p>
+				<p><input type="text" class="inp" id="username" placeholder="Username"></p>
+				<p><input type="password" class="inp" id="password" placeholder="Password"></p>
+				<p><input type="password" class="inp" id="cpassword" placeholder="Confirm Password"></p>
+				<div class="btns">
+					<p><button type="submit" id="register">Sign Up</button></p>
+					<p><button type="submit" id="cancel">Cancel</button></p>
+				</div>
+			</div>
+			<div id="form2">
+				<p class="title2">Log in to see your friends journey.</p>
+				<p><input type="text" class="inp" id="username" placeholder="Username"></p>
+				<p><input type="password" class="inp" id="password" placeholder="Password"></p>
+				<div class="btns">
+					<p><button type="submit" id="login">Log In</button></p>
+					<p><button type="submit" id="reg">Sign Up</button></p>
+				</div>
+				<p id="forget">Forget your password? <a href="#">Click here</a></p>
 			</div>
 		</div>
 	</body>

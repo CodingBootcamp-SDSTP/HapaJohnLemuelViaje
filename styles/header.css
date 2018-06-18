@@ -1,0 +1,49 @@
+.header {
+	position: fixed;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	height: 60px;
+	background: #27ae60;
+	line-height: 60px;
+}
+
+#searchbox {
+	height: 28px;
+	background: white;
+	outline: none;
+	margin-top: 15px;
+	border-radius: 8px;
+	padding: 2%;
+	width: 200px;
+}
+
+#links {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 200px;
+	align-self: center;
+}
+
+#title {
+	font-family: 'Lobster', cursive;
+	font-size: 32px;
+}
+
+#title a {
+	color: white;
+}
+
+::-webkit-input-placeholder {
+	color: rgba(39, 174, 96, 0.7);
+}
+
+::-moz-input-placeholder {
+	color: rgba(39, 174, 96, 0.7);
+}
+
+::-ms-input-placeholder {
+	color: rgba(39, 174, 96, 0.7);
+}
