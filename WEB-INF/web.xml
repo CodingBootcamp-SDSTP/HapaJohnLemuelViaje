@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<web-app>
+	<display-name>Viaje Servlet</display-name>
+	<description>Viaje App</description>
+	<servlet>
+		<servlet-name>User</servlet-name>
+		<servlet-class>AddUsersServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>User</servlet-name>
+		<url-pattern>/users</url-pattern>
+	</servlet-mapping>
+</web-app>
