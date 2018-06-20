@@ -24,11 +24,7 @@ body {
 	  'main main main main main main';
 	grid-gap: 30px;
 	padding: 10px;
-	margin: 0 15% 0 15%;
-}
-
-.container > div {
-	background-color: rgba(255, 255, 255, 0.8);
+	margin: 0 15% 4% 15%;
 }
 
 .profile-pic {
@@ -50,7 +46,6 @@ body {
 }
 
 .container > .item1 > div {
-	background-color: rgba(39, 174, 96, 0.7);
 	padding: 10px;
 	height: 140px;
 	text-align: center;
@@ -85,24 +80,31 @@ body {
 	padding: 10px;
 }
 
-.photo {
-	grid-area: photo;
+.info-followers {
+	grid-area: followers;
 }
 
-.photo1 {
-	grid-area: photo1;
+.info-following {
+	grid-area: following;
 }
 
-.photo2 {
-	grid-area: photo2;
+.container > .item1 > .profile-details > .details-info {
+	display: grid;
+	grid-template-areas:
+	  'followers following';
+	grid-gap: 20px;
+}
+
+.container > .item1 > .profile-details > .details-info > div {
+	padding: 10px;
 }
 
 .container > .item2 {
 	padding: 20px;
 	display: grid;
-	grid-template-areas:
-	'photo photo photo1 photo1 photo2 photo2';
+	grid-template-columns: auto auto auto;
 	grid-gap: 20px;
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 .container > .item2 > div {

@@ -90,4 +90,20 @@
 		<servlet-name>NewsFeed</servlet-name>
 		<url-pattern>/newsFeed</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>ProfileHeader</servlet-name>
+		<servlet-class>ProfileHeaderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProfileHeader</servlet-name>
+		<url-pattern>/userProfileHeader</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ProfilePosts</servlet-name>
+		<servlet-class>ProfilePostsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProfilePosts</servlet-name>
+		<url-pattern>/userProfilePosts</url-pattern>
+	</servlet-mapping>
 </web-app>

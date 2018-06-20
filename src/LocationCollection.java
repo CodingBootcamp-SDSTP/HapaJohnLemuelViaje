@@ -36,4 +36,15 @@ public class LocationCollection
 	public ArrayList<Locations> getAllLocations() {
 		return(locations);
 	}
+
+	public String getLocationByID(int id) {
+		String lname = "";
+		for(int i=0; i<getLocationCount(); i++) {
+			Locations l = getLocationByIndex(i);
+			if(id == l.getID()) {
+				lname = l.getLocationName();
+			}
+		}
+		return(lname);
+	}
 }

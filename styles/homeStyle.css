@@ -3,8 +3,6 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	margin: 0 auto;
-	/* padding: 0; */
-	/* box-sizing: border-box; */
 }
 
 #maincontent {
@@ -14,7 +12,6 @@ body {
 	display: flex;
 	justify-content: flex-start;
 	max-width: 100%;
-	border: 1px solid black;
 }
 
 #feed {

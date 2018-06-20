@@ -55,9 +55,11 @@ function appearNewsFeed() {
 	rq.onreadystatechange = function() {
 		if(rq.readyState == 4) {
 			let data = JSON.parse(rq.response);
-			let feed = document.getElementById("feed");
-			for(var k in data) {
-				feed.innerHTML = "<div class='frame'><div class'frameHeader'>" + data[k].address + ", " + data[k].location + "</div><img src='../images/" + data[k].image + "'><div class'frameCaption'>" + data[k].caption + "</div><div class'frameComment'>Feature underconstruction!</div></div>";
+			if(data != null) {
+				let feed = document.getElementById("feed");
+				for(var k in data) {
+					feed.innerHTML += "<div class='frame'><div class'frameHeader'><h1>" + data[k].address + ", " + data[k].location + "</h1></div><img src='../images/" + data[k].image + "'><div class'frameCaption'><h2>" + data[k].caption + "</h2></div><div class'frameComment'>Comment Feature underconstruction!</div></div>";
+				}
 			}
 		}
 	};

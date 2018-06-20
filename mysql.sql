@@ -22,9 +22,8 @@ CREATE TABLE IF NOT EXISTS users (
 	posts INTEGER NOT NULL
 );
 
-INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'John Lemuel', 'Hapa', 'johnlemuel.hapa@bicol-u.edu.ph', '2.jpg', 0, 0, 1, 'johnlemuelhapa', 'hapa101', 1 );
-
-INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'William', 'Paderan', 'williamphilip.paderan@bicol-u.edu.ph', 'wolfpack.jpg', 0, 0, 1, 'williampaderan', 'wil101', 0 );
+INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'John Lemuel', 'Hapa', 'johnlemuel.hapa@bicol-u.edu.ph', '2.jpg', 1, 1, 1, 'johnlemuelhapa', 'hapa101', 1 );
+INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'William', 'Paderan', 'williamphilip.paderan@bicol-u.edu.ph', 'wolfpack.jpg', 1, 1, 1, 'williampaderan', 'wil101', 0 );
 
 CREATE TABLE IF NOT EXISTS locations (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -304,6 +303,7 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 
 INSERT INTO posts ( user_id, location_id, address, image, caption, status, up, comments ) VALUES ( 1, 181, 'Banawe', 'bg.jpg', 'It is more fun in the Philippines', 1, 1, 1 );
+INSERT INTO posts ( user_id, location_id, address, image, caption, status, up, comments ) VALUES ( 1, 181, 'Legazpi', 'witwit.jpg', 'Miss you guys', 1, 0, 0 );
 
 CREATE TABLE IF NOT EXISTS comments (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,

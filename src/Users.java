@@ -66,7 +66,7 @@ public class Users
 		image = img;
 	}
 
-	public String setImage() {
+	public String getImage() {
 		return(image);
 	}
 
