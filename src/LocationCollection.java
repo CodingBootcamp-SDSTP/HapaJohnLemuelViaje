@@ -8,7 +8,7 @@ public class LocationCollection
 		if(_instance == null) {
 			_instance = new LocationCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Locations> locations;

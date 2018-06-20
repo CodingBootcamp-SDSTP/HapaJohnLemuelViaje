@@ -8,7 +8,7 @@ public class FollowerCollection
 		if(_instance == null) {
 			_instance = new FollowerCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Followers> followers;

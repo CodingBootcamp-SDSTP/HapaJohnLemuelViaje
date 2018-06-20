@@ -10,8 +10,16 @@ public class Comments
 	private String timeDeleted;
 	private int status;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Comments(int id, int pid, int uid, String cmnt, String de, String te, String dd, String td, int sts) {
+		ID = id;
+		postId = pid;
+		userId = uid;
+		comment = cmnt;
+		dateEntry = de;
+		timeEntry = te;
+		dateDeleted = dd;
+		timeDeleted = td;
+		status = sts;
 	}
 
 	public int getID() {

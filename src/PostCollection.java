@@ -8,7 +8,7 @@ public class PostCollection
 		if(_instance == null) {
 			_instance = new PostCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Posts> posts;

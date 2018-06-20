@@ -8,7 +8,7 @@ public class UpCollection
 		if(_instance == null) {
 			_instance = new UpCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Up> ups;

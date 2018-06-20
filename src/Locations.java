@@ -4,8 +4,10 @@ public class Locations
 	private String locationName;
 	private String image;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Locations(int id, String ln, String img) {
+		ID = id;
+		locationName = ln;
+		image = img;
 	}
 
 	public int getID() {
@@ -16,7 +18,7 @@ public class Locations
 		locationName = ln;
 	}
 
-	publoc String getLocationName() {
+	public String getLocationName() {
 		return(locationName);
 	}
 

@@ -14,9 +14,24 @@ public class Users
 	private String password;
 	private String deletedDate;
 	private String deletedTime;
+	private int posts;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Users(int id, String fname, String lname, String eml, String img, String rd, String rt, int flr, int flw, int sts, String uname, String pass, String dd, String dt, int p) {
+		ID = id;
+		firstname = fname;
+		lastname = lname;
+		email = eml;
+		image = img;
+		registeredDate = rd;
+		registeredTime = rt;
+		followers = flr;
+		following = flw;
+		status = sts;
+		username = uname;
+		password = pass;
+		deletedDate = dd;
+		deletedTime = dt;
+		posts = p;
 	}
 
 	public int getID() {
@@ -125,5 +140,13 @@ public class Users
 
 	public String getDeletedTime() {
 		return(deletedTime);
+	}
+
+	public void setPosts(int p) {
+		posts = p;
+	}
+
+	public int getPosts() {
+		return(posts);
 	}
 }

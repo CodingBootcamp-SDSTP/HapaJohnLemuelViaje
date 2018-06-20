@@ -5,9 +5,15 @@ public class Followers
 	private String date;
 	private String time;
 	private int status;
+	private int followerId;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Followers(int id, int uid, String d, String t, int sts, int f) {
+		ID = id;
+		userId = uid;
+		date = d;
+		time = t;
+		status = sts;
+		followerId = f;
 	}
 
 	public int getID() {
@@ -44,5 +50,13 @@ public class Followers
 
 	public int getStatus() {
 		return(status);
+	}
+
+	public void setFollowerId(int fid) {
+		followerId = fid;
+	}
+
+	public int getFollowerId() {
+		return(followerId);
 	}
 }

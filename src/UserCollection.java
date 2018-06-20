@@ -8,7 +8,7 @@ public class UserCollection
 		if(_instance == null) {
 			_instance = new UserCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Users> users;

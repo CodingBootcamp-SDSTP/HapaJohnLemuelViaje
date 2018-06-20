@@ -7,8 +7,13 @@ public class Up
 	private String time;
 	private int status;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Up(int id, int pid, int uid, String d, String t, int sts) {
+		ID = id;
+		postId = pid;
+		userId = uid;
+		date = d;
+		time = t;
+		status = sts;
 	}
 
 	public int getID() {

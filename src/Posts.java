@@ -4,7 +4,6 @@ public class Posts
 	private int userId;
 	private int locationId;
 	private String address;
-	private int badgeId;
 	private String image;
 	private String dateEntry;
 	private String timeEntry;
@@ -13,9 +12,22 @@ public class Posts
 	private String caption;
 	private int status;
 	private int up;
+	private int comments;
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public Posts(int id, int uid, int lid, String add, String img, String de, String te, String dd, String td, String cap, int sts, int u, int cmnt) {
+		ID = id;
+		userId = uid;
+		locationId = lid;
+		address = add;
+		image = img;
+		dateEntry = de;
+		timeEntry = te;
+		dateDeleted = dd;
+		timeDeleted = td;
+		caption = cap;
+		status = sts;
+		up = u;
+		comments = cmnt;
 	}
 
 	public int getID() {
@@ -44,14 +56,6 @@ public class Posts
 
 	public String getAddress() {
 		return(address);
-	}
-
-	public void setBadgeId(int bid) {
-		badgeId = bid;
-	}
-
-	public int getBadgeId() {
-		return(badgeId);
 	}
 
 	public void setImage(String img) {
@@ -116,5 +120,13 @@ public class Posts
 
 	public int getUp() {
 		return(up);
+	}
+
+	public void setComments(int comments) {
+		this.comments = comments;
+	}
+
+	public int getComments() {
+		return(comments);
 	}
 }

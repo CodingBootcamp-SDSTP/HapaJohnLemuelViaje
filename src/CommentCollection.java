@@ -8,7 +8,7 @@ public class CommentCollection
 		if(_instance == null) {
 			_instance = new CommentCollection();
 		}
-		return(_instance)
+		return(_instance);
 	}
 
 	private ArrayList<Comments> comments;

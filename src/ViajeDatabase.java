@@ -19,7 +19,6 @@ public class ViajeDatabase
 	private UpCollection upc;
 	private FollowerCollection frc;
 	private FollowingCollection fwc;
-	private BadgeCollection bc;
 
 	private ViajeDatabase() {
 		uc = UserCollection.instance();
@@ -29,7 +28,6 @@ public class ViajeDatabase
 		upc = UpCollection.instance();
 		frc = FollowerCollection.instance();
 		fwc = FollowingCollection.instance();
-		bc = BadgeCollection.instance();
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/ViajeDB?user=usernameviaje&" + "password=passwordviaje&serverTimezone=UTC&useSSL=false");
@@ -37,8 +35,8 @@ public class ViajeDatabase
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		finally {
-			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		if(readFromSql()) {
+			System.out.println("reading from server ....");
 		}
 	}
 
@@ -48,121 +46,127 @@ public class ViajeDatabase
 		boolean result = false;
 		try {
 			stmt = conn.createStatement();
-			rs = stmt.executeQuery("SELECT id, firstname, lastname, email, image, DATE_FORMAT(registered_date, '%M %d, %Y') as rdate, DATE_FORMAT(registered_date, '%h:%i %p') as rtime, followers, following, status, username, password, DATE_FORMAT(deleted_date, '%M %d, %Y') as ddate, DATE_FORMAT(deleted_date, '%h:%i %p') as dtime FROM users");
+			rs = stmt.executeQuery("SELECT id, firstname, lastname, email, image, DATE_FORMAT(registered_date, '%M %d, %Y') as rdate, DATE_FORMAT(registered_date, '%h:%i %p') as rtime, followers, following, status, username, password, DATE_FORMAT(deleted_date, '%M %d, %Y') as ddate, DATE_FORMAT(deleted_date, '%h:%i %p') as dtime, posts FROM users;");
 			while(rs.next()) {
+				String ddate = rs.getString("ddate");
+				String dtime = rs.getString("dtime");
+				if(ddate == null && dtime == null) {
+					ddate = "0000-00-00";
+					dtime = "00:00:00";
+				}
 				String[] d = {
-					rs.getInt("id"),
+					String.valueOf(rs.getInt("id")),
 					rs.getString("firstname"),
 					rs.getString("lastname"),
 					rs.getString("email"),
 					rs.getString("image"),
 					rs.getString("rdate"),
 					rs.getString("rtime"),
-					rs.getInt("followers"),
-					rs.getInt("following"),
-					rs.getInt("status"),
+					String.valueOf(rs.getInt("followers")),
+					String.valueOf(rs.getInt("following")),
+					String.valueOf(rs.getInt("status")),
 					rs.getString("username"),
 					rs.getString("password"),
-					rs.getString("ddate"),
-					rs.getString("dtime"),
+					ddate,
+					dtime,
+					String.valueOf(rs.getInt("posts")),
 					"users"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT * FROM locations");
+			rs = stmt.executeQuery("SELECT * FROM locations;");
 			while(rs.next()) {
 				String[] d = {
-					rs.getInt("id"),
+					String.valueOf(rs.getInt("id")),
 					rs.getString("location_name"),
 					rs.getString("image"),
 					"locations"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT id, user_id, location_id, DATE_FORMAT(date_entry, '%M %d, %Y') as dentry, DATE_FORMAT(date_entry, '%h:%i %p') as tentry, DATE_FORMAT(date_deleted, '%M %d, %Y') as ddeleted, DATE_FORMAT(date_deleted, '%h:%i %p') as tdeleted, status FROM badges");
+			rs = stmt.executeQuery("SELECT id, user_id, location_id, address, image, DATE_FORMAT(date_entry, '%M %d, %Y') as dentry, DATE_FORMAT(date_entry, '%h:%i %p') as tentry, DATE_FORMAT(date_deleted, '%M %d, %Y') as ddeleted, DATE_FORMAT(date_deleted, '%h:%i %p') as tdeleted, caption, status, up, comments FROM posts;");
 			while(rs.next()) {
+				String ddate = rs.getString("ddeleted");
+				String dtime = rs.getString("tdeleted");
+				if(ddate == null && dtime == null) {
+					ddate = "0000-00-00";
+					dtime = "00:00:00";
+				}
 				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("user_id"),
-					rs.getInt("location_id"),
-					rs.getString("dentry"),
-					rs.getString("tentry"),
-					rs.getString("ddeleted"),
-					rs.getString("tdeleted"),
-					rs.getInt("status"),
-					"badges"
-				};
-				createObjectFromSql(d);
-			}
-			rs = stmt.executeQuery("SELECT id, user_id, location_id, address, badge_id, image, DATE_FORMAT(date_entry, '%M %d, %Y') as dentry, DATE_FORMAT(date_entry, '%h:%i %p') as tentry, DATE_FORMAT(date_deleted, '%M %d, %Y') as ddeleted, DATE_FORMAT(date_deleted, '%h:%i %p') as tdeleted, caption, status, up FROM posts");
-			while(rs.next()) {
-				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("user_id"),
-					rs.getInt("location_id"),
+					String.valueOf(rs.getInt("id")),
+					String.valueOf(rs.getInt("user_id")),
+					String.valueOf(rs.getInt("location_id")),
 					rs.getString("address"),
-					rs.getInt("badge_id"),
 					rs.getString("image"),
 					rs.getString("dentry"),
 					rs.getString("tentry"),
-					rs.getString("ddeleted"),
-					rs.getString("tdeleted"),
+					ddate,
+					dtime,
 					rs.getString("caption"),
-					rs.getInt("status"),
-					rs.getInt("up"),
+					String.valueOf(rs.getInt("status")),
+					String.valueOf(rs.getInt("up")),
+					String.valueOf(rs.getInt("comments")),
 					"posts"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT id, post_id, user_id, comment, DATE_FORMAT(date_entry, '%M %d, %Y') as dentry, DATE_FORMAT(date_entry, '%h:%i %p') as tentry, DATE_FORMAT(date_deleted, '%M %d, %Y') as ddeleted, DATE_FORMAT(date_deleted, '%h:%i %p') as tdeleted, status FROM comments");
+			rs = stmt.executeQuery("SELECT id, post_id, user_id, comment, DATE_FORMAT(date_entry, '%M %d, %Y') as dentry, DATE_FORMAT(date_entry, '%h:%i %p') as tentry, DATE_FORMAT(date_deleted, '%M %d, %Y') as ddeleted, DATE_FORMAT(date_deleted, '%h:%i %p') as tdeleted, status FROM comments;");
 			while(rs.next()) {
+				String ddate = rs.getString("ddeleted");
+				String dtime = rs.getString("tdeleted");
+				if(ddate == null && dtime == null) {
+					ddate = "0000-00-00";
+					dtime = "00:00:00";
+				}
 				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("post_id"),
-					rs.getInt("user_id"),
+					String.valueOf(rs.getInt("id")),
+					String.valueOf(rs.getInt("post_id")),
+					String.valueOf(rs.getInt("user_id")),
 					rs.getString("comment"),
 					rs.getString("dentry"),
 					rs.getString("tentry"),
-					rs.getString("ddeleted"),
-					rs.getString("tdeleted"),
-					rs.getInt("status"),
+					ddate,
+					dtime,
+					String.valueOf(rs.getInt("status")),
 					"comments"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT id, post_id, user_id, DATE_FORMAT(up, '%M %d, %Y') as ddate, DATE_FORMAT(up, '%h:%i %p') as dtime, status FROM up");
+			rs = stmt.executeQuery("SELECT id, post_id, user_id, DATE_FORMAT(date, '%M %d, %Y') as ddate, DATE_FORMAT(date, '%h:%i %p') as dtime, status FROM up;");
 			while(rs.next()) {
 				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("post_id"),
-					rs.getInt("user_id"),
+					String.valueOf(rs.getInt("id")),
+					String.valueOf(rs.getInt("post_id")),
+					String.valueOf(rs.getInt("user_id")),
 					rs.getString("ddate"),
 					rs.getString("dtime"),
-					rs.getInt("status"),
+					String.valueOf(rs.getInt("status")),
 					"up"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT id, user_id, DATE_FORMAT(up, '%M %d, %Y') as ddate, DATE_FORMAT(up, '%h:%i %p') as dtime, status FROM followers");
+			rs = stmt.executeQuery("SELECT id, user_id, DATE_FORMAT(date, '%M %d, %Y') as ddate, DATE_FORMAT(date, '%h:%i %p') as dtime, status, whoFollow_id FROM followers;");
 			while(rs.next()) {
 				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("user_id"),
+					String.valueOf(rs.getInt("id")),
+					String.valueOf(rs.getInt("user_id")),
 					rs.getString("ddate"),
 					rs.getString("dtime"),
-					rs.getInt("status"),
+					String.valueOf(rs.getInt("status")),
+					String.valueOf(rs.getInt("whoFollow_id")),
 					"followers"
 				};
 				createObjectFromSql(d);
 			}
-			rs = stmt.executeQuery("SELECT id, user_id, DATE_FORMAT(up, '%M %d, %Y') as ddate, DATE_FORMAT(up, '%h:%i %p') as dtime, status FROM following");
+			rs = stmt.executeQuery("SELECT id, user_id, DATE_FORMAT(date, '%M %d, %Y') as ddate, DATE_FORMAT(date, '%h:%i %p') as dtime, status, youFollow_id FROM following;");
 			while(rs.next()) {
 				String[] d = {
-					rs.getInt("id"),
-					rs.getInt("user_id"),
+					String.valueOf(rs.getInt("id")),
+					String.valueOf(rs.getInt("user_id")),
 					rs.getString("ddate"),
 					rs.getString("dtime"),
-					rs.getInt("status"),
+					String.valueOf(rs.getInt("status")),
+					String.valueOf(rs.getInt("youFollow_id")),
 					"following"
 				};
 				createObjectFromSql(d);
@@ -183,19 +187,15 @@ public class ViajeDatabase
 		String d = str[len];
 		switch(d) {
 			case "users":
-				Users user = new Users(Integer.parseInt(str[0]), str[1], str[2], str[3], str[4], str[5], str[6], Integer.parseInt(str[7]), Integer.parseInt(str[8]), Integer.parseInt(str[9]), str[10], str[11], str[12], str[13]);
+				Users user = new Users(Integer.parseInt(str[0]), str[1], str[2], str[3], str[4], str[5], str[6], Integer.parseInt(str[7]), Integer.parseInt(str[8]), Integer.parseInt(str[9]), str[10], str[11], str[12], str[13], Integer.parseInt(str[14]));
 				uc.addUser(user);
 				break;
 			case "locations":
 				Locations location = new Locations(Integer.parseInt(str[0]), str[1], str[2]);
 				lc.addLocation(location);
 				break;
-			case "badges":
-				Badges badge = new Badges(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]), str[3], str[4], str[5], str[6], Integer.parseInt(str[7]));
-				bc.addBadge(badge);
-				break;
 			case "posts":
-				Posts post = new Posts(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]), str[3], Integer.parseInt(str[4]), str[5], str[6], str[7], str[8], str[9], str[10], Integer.parseInt(str[11]), Integer.parseInt(str[12]));
+				Posts post = new Posts(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]), str[3], str[4], str[5], str[6], str[7], str[8], str[9], Integer.parseInt(str[10]), Integer.parseInt(str[11]), Integer.parseInt(str[12]));
 				pc.addPost(post);
 				break;
 			case "comments":
@@ -207,22 +207,68 @@ public class ViajeDatabase
 				upc.addUp(up);
 				break;
 			case "followers":
-				Followers follower = new Followers(Integer.parseInt(str[0]), Integer.parseInt(str[1]), str[2], str[3], Integer.parseInt(str[4]));
+				Followers follower = new Followers(Integer.parseInt(str[0]), Integer.parseInt(str[1]), str[2], str[3], Integer.parseInt(str[4]), Integer.parseInt(str[5]));
 				frc.addFollower(follower);
 				break;
 			case "following":
-				Following following = new Following(Integer.parseInt(str[0]), Integer.parseInt(str[1]), str[2], str[3], Integer.parseInt(str[4]));
+				Following following = new Following(Integer.parseInt(str[0]), Integer.parseInt(str[1]), str[2], str[3], Integer.parseInt(str[4]), Integer.parseInt(str[5]));
 				fwc.addFollowing(following);
 				break;
 		}
 	}
 
-	public boolean registerAccount(String... d) {
+	public boolean login(String uname, String upass) {
 		boolean result = false;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = conn.prepareStatement("INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, deleted_date ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			stmt = conn.prepareStatement("SELECT COUNT(*) as count FROM users WHERE username = ? AND password = ?;");
+			stmt.setString(1, uname);
+			stmt.setString(2, upass);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt("count") > 0) {
+				result = true;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+			try { if(rs != null) rs.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean checkAccount(String uname) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement("SELECT COUNT(username) as count FROM users WHERE username = ?;");
+			stmt.setString(1, uname);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt("count") > 0) {
+				result = true;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+			try { if(rs != null) rs.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean registerAccount(String... d) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );");
 			stmt.setString(1, d[0]);
 			stmt.setString(2, d[1]);
 			stmt.setString(3, d[2]);
@@ -232,7 +278,7 @@ public class ViajeDatabase
 			stmt.setInt(7, Integer.parseInt(d[6]));
 			stmt.setString(8, d[7]);
 			stmt.setString(9, d[8]);
-			stmt.setString(10, d[9]);
+			stmt.setInt(10, Integer.parseInt(d[9]));
 			stmt.executeUpdate();
 			result = true;
 		}
@@ -241,7 +287,99 @@ public class ViajeDatabase
 		}
 		finally {
 			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
-			try { if(rs != null) rs.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean addPost(String... d) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("INSERT INTO posts ( user_id, location_id, address, image, caption, status, up, comments ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? );");
+			stmt.setInt(1, Integer.parseInt(d[0]));
+			stmt.setInt(2, Integer.parseInt(d[1]));
+			stmt.setString(3, d[2]);
+			stmt.setString(4, d[3]);
+			stmt.setString(5, d[4]);
+			stmt.setInt(6, Integer.parseInt(d[5]));
+			stmt.setInt(7, Integer.parseInt(d[6]));
+			stmt.setInt(8, Integer.parseInt(d[7]));
+			stmt.executeUpdate();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean addComment(String... d) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("INSERT INTO comments ( post_id, user_id, comment, status ) VALUES ( ?, ?, ?, ?, ? );");
+			stmt.setInt(1, Integer.parseInt(d[0]));
+			stmt.setInt(2, Integer.parseInt(d[1]));
+			stmt.setString(3, d[2]);
+			stmt.setInt(4, Integer.parseInt(d[3]));
+			stmt.executeUpdate();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean addUp(String... d) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			stmt = conn.prepareStatement("INSERT INTO up ( post_id, user_id, date, status ) VALUES ( ?, ?, ?, ? );");
+			stmt.setInt(1, Integer.parseInt(d[0]));
+			stmt.setInt(2, Integer.parseInt(d[1]));
+			stmt.setString(3, d[2]);
+			stmt.setInt(4, Integer.parseInt(d[3]));
+			stmt.executeUpdate();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean addFollowingAndFollowers(String type, String... d) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			if("follower".equals(type)) {
+				stmt = conn.prepareStatement("INSERT INTO followers ( user_id, date, status, whoFollow_id ) VALUES ( ?, ?, ?, ? );");
+			}
+			else if("following".equals(type)) {
+				stmt = conn.prepareStatement("INSERT INTO following ( user_id, date, status, youFollow_id ) VALUES ( ?, ?, ?, ? );");
+			}
+			stmt.setInt(1, Integer.parseInt(d[0]));
+			stmt.setString(2, d[1]);
+			stmt.setInt(3, Integer.parseInt(d[2]));
+			stmt.setInt(4, Integer.parseInt(d[3]));
+			stmt.executeUpdate();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
 		}
 		return(result);
 	}

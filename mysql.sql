@@ -3,9 +3,8 @@ DROP TABLE up;
 DROP TABLE followers;
 DROP TABLE following;
 DROP TABLE posts;
-DROP TABLE badges;
-DROP TABLE users;
 DROP TABLE locations;
+DROP TABLE users;
 
 CREATE TABLE IF NOT EXISTS users (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -19,8 +18,13 @@ CREATE TABLE IF NOT EXISTS users (
 	status INTEGER NOT NULL,
 	username VARCHAR(255) NOT NULL,
 	password VARCHAR(255) NOT NULL,
-	deleted_date DATETIME NOT NULL
+	deleted_date DATETIME,
+	posts INTEGER NOT NULL
 );
+
+INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'John Lemuel', 'Hapa', 'johnlemuel.hapa@bicol-u.edu.ph', '2.jpg', 0, 0, 1, 'johnlemuelhapa', 'hapa101', 1 );
+
+INSERT INTO users ( firstname, lastname, email, image, followers, following, status, username, password, posts ) VALUES ( 'William', 'Paderan', 'williamphilip.paderan@bicol-u.edu.ph', 'wolfpack.jpg', 0, 0, 1, 'williampaderan', 'wil101', 0 );
 
 CREATE TABLE IF NOT EXISTS locations (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -283,33 +287,23 @@ INSERT INTO locations ( location_name, image ) VALUES ( 'South Africa', 'SouthAf
 INSERT INTO locations ( location_name, image ) VALUES ( 'Zambia', 'Zambia.svg' );
 INSERT INTO locations ( location_name, image ) VALUES ( 'Zimbabwe', 'Zimbabwe.svg' );
 
-CREATE TABLE IF NOT EXISTS badges (
-	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	user_id INTEGER NOT NULL,
-	location_id INTEGER NOT NULL,
-	date_entry DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	date_deleted DATETIME NOT NULL,
-	status INTEGER NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (location_id) REFERENCES locations(id)
-);
-
 CREATE TABLE IF NOT EXISTS posts (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	user_id INTEGER NOT NULL,
 	location_id INTEGER NOT NULL,
 	address VARCHAR(255) NOT NULL,
-	badge_id INTEGER NOT NULL,
 	image VARCHAR(255) NOT NULL,
 	date_entry DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	date_deleted DATETIME NOT NULL,
+	date_deleted DATETIME,
 	caption VARCHAR(255) NOT NULL,
 	status VARCHAR(255) NOT NULL,
 	up INTEGER NOT NULL,
+	comments INTEGER NOT NULL,
 	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY (location_id) REFERENCES locations(id),
-	FOREIGN KEY (badge_id) REFERENCES badges(id)
+	FOREIGN KEY (location_id) REFERENCES locations(id)
 );
+
+INSERT INTO posts ( user_id, location_id, address, image, caption, status, up, comments ) VALUES ( 1, 181, 'Banawe', 'bg.jpg', 'It is more fun in the Philippines', 1, 1, 1 );
 
 CREATE TABLE IF NOT EXISTS comments (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -317,11 +311,13 @@ CREATE TABLE IF NOT EXISTS comments (
 	user_id INTEGER NOT NULL,
 	comment VARCHAR(255) NOT NULL,
 	date_entry DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	date_deleted DATETIME NOT NULL,
+	date_deleted DATETIME,
 	status INTEGER NOT NULL,
 	FOREIGN KEY (post_id) REFERENCES posts(id),
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+INSERT INTO comments ( post_id, user_id, comment, status ) VALUES ( 1, 2, 'Wow ang ganda naman tlga dyan', 1 );
 
 CREATE TABLE IF NOT EXISTS up (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -333,18 +329,30 @@ CREATE TABLE IF NOT EXISTS up (
 	FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+INSERT INTO up ( post_id, user_id, date, status ) VALUES ( 1, 2, '2018-06-20 08:41:10', 1 );
+
 CREATE TABLE IF NOT EXISTS followers (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	user_id INTEGER NOT NULL,
 	date DATETIME NOT NULL,
 	status VARCHAR(255) NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES users(id)
+	whoFollow_id INTEGER NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (whoFollow_id) REFERENCES users(id)
 );
+
+INSERT INTO followers ( user_id, date, status, whoFollow_id ) VALUES ( 1, '2018-06-20 09:02:10', 1, 2 );
+INSERT INTO followers ( user_id, date, status, whoFollow_id ) VALUES ( 2, '2018-06-20 09:02:10', 1, 1 );
 
 CREATE TABLE IF NOT EXISTS following (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	user_id INTEGER NOT NULL,
 	date DATETIME NOT NULL,
 	status VARCHAR(255) NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES users(id)
+	youFollow_id INTEGER NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY (youFollow_id) REFERENCES users(id)
 );
+
+INSERT INTO following ( user_id, date, status, youFollow_id ) VALUES ( 2, '2018-06-20 09:03:12', 1, 1 );
+INSERT INTO following ( user_id, date, status, youFollow_id ) VALUES ( 1, '2018-06-20 09:03:12', 1, 2 );
