@@ -36,4 +36,26 @@ public class UserCollection
 	public ArrayList<Users> getAllUsers() {
 		return(users);
 	}
+
+	public String getFullName(int userid) {
+		String fullname = "";
+		for(int i=0; i<getUserCount(); i++) {
+			Users user = getUserByIndex(i);
+			if(userid == user.getID()) {
+				fullname = user.getLastname() + ", " + user.getFirstname();
+			}
+		}
+		return(fullname);
+	}
+
+	public int getUserID(String uname) {
+		int id = 0;
+		for(int i=0; i<getUserCount(); i++) {
+			Users user = getUserByIndex(i);
+			if(uname.equals(user.getUsername())) {
+				id = user.getID();
+			}
+		}
+		return(id);
+	}
 }

@@ -106,4 +106,21 @@
 		<servlet-name>ProfilePosts</servlet-name>
 		<url-pattern>/userProfilePosts</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>OtherProfileHeader</servlet-name>
+		<servlet-class>OtherProfileHeaderServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OtherProfileHeader</servlet-name>
+		<url-pattern>/otherProfileHeader</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OtherProfilePosts</servlet-name>
+		<servlet-class>OtherProfilePostsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OtherProfilePosts</servlet-name>
+		<url-pattern>/otherProfilePosts</url-pattern>
+	</servlet-mapping>
 </web-app>

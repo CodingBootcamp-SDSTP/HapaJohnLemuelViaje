@@ -9,12 +9,14 @@ public class NewsFeedServlet extends HttpServlet
 	PostCollection pc;
 	FollowingCollection fwc;
 	LocationCollection lc;
+	UserCollection uc;
 
 	public void init() throws ServletException {
 		vdb = ViajeDatabase.instance();
 		pc = PostCollection.instance();
 		fwc = FollowingCollection.instance();
 		lc = LocationCollection.instance();
+		uc = UserCollection.instance();
 	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +37,7 @@ public class NewsFeedServlet extends HttpServlet
 			Posts post = pc.getPostByIndex(i);
 			for(int j=0; j<users.size(); j++) {
 				if(users.get(j) == post.getUserId()) {
-					bf.append("{\"address\" : \"" + post.getAddress() + "\", \"location\" : \"" + lc.getLocationByID(post.getLocationId()) + "\", \"image\" : \"" + post.getImage() + "\", \"caption\" : \"" + post.getCaption() + "\"}");
+					bf.append("{\"fullname\" : \"" + uc.getFullName(users.get(j)) + "\", \"address\" : \"" + post.getAddress() + "\", \"location\" : \"" + lc.getLocationByID(post.getLocationId()) + "\", \"image\" : \"" + post.getImage() + "\", \"caption\" : \"" + post.getCaption() + "\"}");
 				}
 				if(i != pc.getPostCount()-1) {
 					bf.append(",");
@@ -51,5 +53,6 @@ public class NewsFeedServlet extends HttpServlet
 		pc = null;
 		fwc = null;
 		lc = null;
+		uc = null;
 	}
 }

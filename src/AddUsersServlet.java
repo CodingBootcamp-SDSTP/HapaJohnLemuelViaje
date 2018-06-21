@@ -28,7 +28,9 @@ public class AddUsersServlet extends HttpServlet
 		}
 		else {
 			if(vdb.registerAccount(d)) {
-				out.write("Successfully Registered");
+				if(vdb.getUserByUsernameFromSql(uname[1])) {
+					out.write("Successfully Registered");
+				}
 			}
 			else {
 				out.write("Registration Failed");

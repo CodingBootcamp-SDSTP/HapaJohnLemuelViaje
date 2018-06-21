@@ -5,6 +5,20 @@ window.onload =  function() {
 	checkSessionExistence(sessionID);
 	appearNewsFeed();
 
+	var searchbtn = document.getElementById("searchbtn");
+	var search = document.getElementById("searchbox");
+
+	search.addEventListener("keyup", (event) => {
+		event.preventDefault();
+		if(event.keyCode === 13) {
+			searchbtn.click();
+		}
+	});
+
+	searchbtn.onclick = function() {
+		window.location.href = "/HapaJohnLemuelViaje/pages/users.html?name=" + search.value;
+	};
+
 	document.getElementById("logoutnow").onclick = function() {
 		endSession(sessionID);
 	};
@@ -58,7 +72,7 @@ function appearNewsFeed() {
 			if(data != null) {
 				let feed = document.getElementById("feed");
 				for(var k in data) {
-					feed.innerHTML += "<div class='frame'><div class'frameHeader'><h1>" + data[k].address + ", " + data[k].location + "</h1></div><img src='../images/" + data[k].image + "'><div class'frameCaption'><h2>" + data[k].caption + "</h2></div><div class'frameComment'>Comment Feature underconstruction!</div></div>";
+					feed.innerHTML += "<div class='frame'><div class'frameHeader'><h2>" + data[k].fullname + " (" + data[k].address + ", " + data[k].location + ")</h2></div><img src='../images/" + data[k].image + "'><div class'frameCaption'><h2>" + data[k].caption + "</h2></div><div class'frameComment'>Comment Feature underconstruction!</div></div>";
 				}
 			}
 		}

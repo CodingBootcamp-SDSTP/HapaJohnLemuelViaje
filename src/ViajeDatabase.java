@@ -31,12 +31,12 @@ public class ViajeDatabase
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/ViajeDB?user=usernameviaje&" + "password=passwordviaje&serverTimezone=UTC&useSSL=false");
+			if(readFromSql()) {
+				System.out.println("reading from server ....");
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-		}
-		if(readFromSql()) {
-			System.out.println("reading from server ....");
 		}
 	}
 
@@ -382,5 +382,61 @@ public class ViajeDatabase
 			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
 		}
 		return(result);
+	}
+
+	public boolean addFollowingAndFollowerCount(String type, int uid) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		try {
+			if("following".equals(type)) {
+				stmt = conn.prepareStatement("UPDATE users SET following = following + 1 WHERE id = ?;");
+			}
+			else if("follower".equals(type)) {
+				stmt = conn.prepareStatement("UPDATE users SET followers = followers + 1 WHERE id = ?;");
+			}
+			stmt.setInt(1, uid);
+			stmt.executeUpdate();
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public boolean getUserByUsernameFromSql(String uname) {
+		boolean result = false;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.prepareStatement("SELECT id, firstname, lastname, email, image, DATE_FORMAT(registered_date, '%M %d, %Y') as rdate, DATE_FORMAT(registered_date, '%h:%i %p') as rtime, followers, following, status, username, password, DATE_FORMAT(deleted_date, '%M %d, %Y') as ddate, DATE_FORMAT(deleted_date, '%h:%i %p') as dtime, posts FROM users WHERE username = ?;");
+			stmt.setString(1, uname);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				String ddate = rs.getString("ddate");
+				String dtime = rs.getString("dtime");
+				if(ddate == null && dtime == null) {
+					ddate = "0000-00-00";
+					dtime = "00:00:00";
+				}
+				Users user = new Users(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getString("email"), rs.getString("image"), rs.getString("rdate"), rs.getString("rtime"), rs.getInt("followers"), rs.getInt("following"), rs.getInt("status"), rs.getString("username"), rs.getString("password"), ddate, dtime, rs.getInt("posts"));
+				addUser(user);
+			}
+			result = true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try { if(stmt != null) stmt.close(); } catch(Exception e) {};
+		}
+		return(result);
+	}
+
+	public void addUser(Users user) {
+		uc.addUser(user);
 	}
 }

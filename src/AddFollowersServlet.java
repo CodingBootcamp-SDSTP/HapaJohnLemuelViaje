@@ -3,6 +3,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.io.BufferedReader;
 
 public class AddFollowersServlet extends HttpServlet
 {
@@ -15,7 +16,8 @@ public class AddFollowersServlet extends HttpServlet
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/plain");
-		String query = request.getQueryString();
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String query = br.readLine();
 		String[] column = query.split("&");
 		String[] uid = column[0].split("=");
 		String[] fid = column[1].split("=");
@@ -23,10 +25,12 @@ public class AddFollowersServlet extends HttpServlet
 		String date = LocalDate.now().toString() + " " + lt.getHour() + ":" + lt.getMinute() + ":" + lt.getSecond();
 		String[] d = {uid[1], date, "1", fid[1]};
 		if(vdb.addFollowingAndFollowers("follower", d)) {
-			out.write("Successfully Added");
+			if(vdb.addFollowingAndFollowerCount("follower", Integer.parseInt(uid[1]))) {
+				out.write("ok");
+			}
 		}
 		else {
-			out.write("Insertion Failed");
+			out.write("failed");
 		}
 	}
 
